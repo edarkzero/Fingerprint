@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FingerprintClient", "FingerprintClient.csproj", "{BF3A3FA1-15E5-489A-B26C-C09DC806A894}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF3A3FA1-15E5-489A-B26C-C09DC806A894}.Debug|x86.ActiveCfg = Debug|x86
+		{BF3A3FA1-15E5-489A-B26C-C09DC806A894}.Debug|x86.Build.0 = Debug|x86
+		{BF3A3FA1-15E5-489A-B26C-C09DC806A894}.Release|x86.ActiveCfg = Release|x86
+		{BF3A3FA1-15E5-489A-B26C-C09DC806A894}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

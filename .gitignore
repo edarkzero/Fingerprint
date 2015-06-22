@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/FingerprintClient/bin/Debug
+/FingerprintClient/obj/Debug
+/FingerprintClient/obj/x86/Debug
+/FingerprintServer/Backup
+/FingerprintServer/bin/Debug
+/FingerprintServer/bin/Release
+/FingerprintServer/obj/Debug
