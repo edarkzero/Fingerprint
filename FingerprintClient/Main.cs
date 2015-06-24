@@ -47,13 +47,33 @@ namespace FingerprintClient
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                Bitmap bmp = new Bitmap(openFileDialog.FileName);
+                //Not working asynchronus client
+                /*Bitmap bmp = new Bitmap(openFileDialog.FileName);
                 MemoryStream ms = new MemoryStream();
                 bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
                 byte[] bmpBytes = ms.GetBuffer();
                 bmp.Dispose();
-                ms.Close();
-                SocketManager sm = new SocketManager(bmpBytes);
+                ms.Close();*/
+
+                //bmpBytes  = bmpBytes.Concat(Encoding.ASCII.GetBytes("<EOF>")).ToArray();
+
+                /*Console.WriteLine("N bytes {0}", bmpBytes.Count());
+                string result = "";
+                
+                foreach(byte data in bmpBytes)
+                {
+                    result += bmpBytes.ToString();
+                }
+
+                Console.WriteLine("Data string",result);
+                Console.WriteLine("done");*/
+                /*SocketManager sm = new SocketManager(bmpBytes);*/
+
+                //Failed Testing synchronus client
+                //SynchronousSocketClient.StartClient(bmpBytes);
+
+                //Testing TCP send from 3rd party user
+                SocketManager.SendTCP(openFileDialog.FileName, "127.0.0.1", 11000);
             }
         }
     }

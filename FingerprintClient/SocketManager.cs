@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.IO;
 
 namespace FingerprintClient
 {
@@ -29,6 +30,55 @@ namespace FingerprintClient
         {
             return response.Split(new String[]{"[{sep}]"},StringSplitOptions.RemoveEmptyEntries);
         }
+
+        public static void SendTCP(string M, string IPA, Int32 PortN)
+        {
+            byte[] SendingBuffer = null;
+            int BufferSize = 1024;
+            TcpClient client = null;
+            string lblStatus = "";
+            NetworkStream netstream = null;
+            try
+            {
+                 client = new TcpClient(IPA, PortN);
+                 lblStatus = "Connected to the Server...\n";
+                 netstream = client.GetStream();
+                 FileStream Fs = new FileStream(M, FileMode.Open, FileAccess.Read);
+                 int NoOfPackets = Convert.ToInt32
+	          (Math.Ceiling(Convert.ToDouble(Fs.Length) / Convert.ToDouble(BufferSize)));
+                 //progressBar1.Maximum = NoOfPackets;
+                 int TotalLength = (int)Fs.Length, CurrentPacketLength, counter = 0;
+                 for (int i = 0; i < NoOfPackets; i++)
+                 {
+                     if (TotalLength > BufferSize)
+                     {
+                         CurrentPacketLength = BufferSize;
+                         TotalLength = TotalLength - CurrentPacketLength;
+                     }
+                     else
+                         CurrentPacketLength = TotalLength;
+                         SendingBuffer = new byte[CurrentPacketLength];
+                         Fs.Read(SendingBuffer, 0, CurrentPacketLength);
+                         netstream.Write(SendingBuffer, 0, (int)SendingBuffer.Length);
+                         /*if (progressBar1.Value >= progressBar1.Maximum)
+                              progressBar1.Value = progressBar1.Minimum;
+                         progressBar1.PerformStep();*/
+                }
+                
+                     lblStatus += "Sent "+Fs.Length.ToString()+"bytes to the server";
+                     Fs.Close();
+                     Console.WriteLine(lblStatus);
+                 }
+            catch (Exception ex)
+            {
+                 Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                 netstream.Close();
+                 client.Close();
+            }
+        } 
     }
 
     // State object for receiving data from remote device.
@@ -224,6 +274,62 @@ namespace FingerprintClient
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+            }
+        }
+    }
+
+    public class SynchronousSocketClient
+    {
+
+        public static void StartClient() {
+            // Data buffer for incoming data.
+            byte[] bytes = new byte[1024];
+
+            // Connect to a remote device.
+            try {
+                // Establish the remote endpoint for the socket.
+                // This example uses port 11000 on the local computer.
+                IPHostEntry ipHostInfo = Dns.Resolve("127.0.0.1");
+                IPAddress ipAddress = ipHostInfo.AddressList[0];
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress,11000);
+
+                // Create a TCP/IP  socket.
+                Socket sender = new Socket(AddressFamily.InterNetwork, 
+                    SocketType.Stream, ProtocolType.Tcp );
+
+                // Connect the socket to the remote endpoint. Catch any errors.
+                try {
+                    sender.Connect(remoteEP);
+
+                    Console.WriteLine("Socket connected to {0}",
+                        sender.RemoteEndPoint.ToString());
+
+                    // Encode the data string into a byte array.
+                    byte[] msg = Encoding.ASCII.GetBytes("This is a test<EOF>");
+                    //byte[] msg = info;
+
+                    // Send the data through the socket.
+                    int bytesSent = sender.Send(msg);
+
+                    // Receive the response from the remote device.
+                    int bytesRec = sender.Receive(bytes);
+                    Console.WriteLine("Echoed test = {0}",
+                        Encoding.ASCII.GetString(bytes,0,bytesRec));
+
+                    // Release the socket.
+                    sender.Shutdown(SocketShutdown.Both);
+                    sender.Close();
+                
+                } catch (ArgumentNullException ane) {
+                    Console.WriteLine("ArgumentNullException : {0}",ane.ToString());
+                } catch (SocketException se) {
+                    Console.WriteLine("SocketException : {0}",se.ToString());
+                } catch (Exception e) {
+                    Console.WriteLine("Unexpected exception : {0}", e.ToString());
+                }
+
+            } catch (Exception e) {
+                Console.WriteLine( e.ToString());
             }
         }
     }

@@ -727,7 +727,9 @@ namespace FingerprintNetSample
 
         private void menuItemStartServer_Click(object sender, EventArgs e)
         {            
-            socket.StartListening();
+            //socket.StartListening();
+            //SynchronousSocketListener.StartListening();
+            SocketControl.ReceiveTCP(11000);
             /*socketImg.StartListening();
             this.pictureBox1.Image = socketImg.image;
             this.pictureBox1_Click(sender, e);*/
