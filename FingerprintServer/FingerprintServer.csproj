@@ -95,10 +95,10 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImageConverter.cs" />
+    <Compile Include="ImageControl.cs" />
+    <Compile Include="LogControl.cs" />
     <Compile Include="Password.cs" />
     <Compile Include="SocketControl.cs" />
-    <Compile Include="SocketControlImage.cs" />
     <Compile Include="UserView.cs">
       <SubType>Form</SubType>
     </Compile>

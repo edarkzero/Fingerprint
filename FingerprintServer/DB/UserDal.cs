@@ -28,10 +28,8 @@ namespace FingerprintNetSample.DB
                 string name = fields[0];
                 string password = fields[1].Replace("<EOF>", "");
                 string info;
-                //Console.WriteLine(name + ", " + password);
-                string msj = name;
 
-                frmMain.Log += Environment.NewLine + "Trying to log: " + msj+" - TIME: "+DateTools.getNow();
+                frmMain.logControl.SetCurrent("Trying to log: " + name,true,false);
 
                 OleDbCommand oleCommand = new OleDbCommand(strCommand, dbConection);
                 oleCommand.Parameters.Add(new OleDbParameter("@name", OleDbType.VarChar));
@@ -47,12 +45,12 @@ namespace FingerprintNetSample.DB
                     {
                         name = Convert.ToString(dataReader["Name"]);
                         info = Convert.ToString(dataReader["Info"]);
-                        frmMain.Log += Environment.NewLine + "Logged: " + msj + Environment.NewLine + " - TIME: " + DateTools.getNow();
+                        frmMain.logControl.SetCurrent("Logged: " + name, true, true);
                     }
                     else
                     {
                         name = info = "Invalid";
-                        frmMain.Log += Environment.NewLine + "Invalid login data: " + msj + Environment.NewLine + " - TIME: " + DateTools.getNow();
+                        frmMain.logControl.SetCurrent("Invalid login data: " + name, true, true);
                     }
                 }
 
@@ -60,7 +58,7 @@ namespace FingerprintNetSample.DB
             }
             else
             {
-                frmMain.Log += Environment.NewLine + "Invalid login data: " + rawMessage + Environment.NewLine + " - TIME: " + DateTools.getNow();
+                frmMain.logControl.SetCurrent("Invalid login data: " + rawMessage, true, true);
                 return "Invalid2[{sep}]Invalid2";
             }
         }

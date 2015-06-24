@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FingerprintNetSample
 {
-    class ImageConverter
+    class ImageControl
     {
         public static byte[] imageToByteArray(System.Drawing.Image imageIn)
         {

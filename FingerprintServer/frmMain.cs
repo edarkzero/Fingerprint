@@ -28,16 +28,16 @@ namespace FingerprintNetSample
             this.trackBarSensibility.Minimum = FingerprintConstants.GR_MIN_THRESHOLD;
             this.trackBarRotation.Maximum = FingerprintConstants.GR_ROT_MAX;
             this.trackBarRotation.Minimum = FingerprintConstants.GR_ROT_MIN;
-            Log = "";
+            logControl = new LogControl();
+            socket = new SocketControl();
         }
         //private bool consolidate = false;
         private formOption fopt;
-        private FingerprintCore fingerPrint;
+        public static FingerprintCore fingerPrint;
         private GriauleFingerprintLibrary.DataTypes.FingerprintRawImage rawImage;
         GriauleFingerprintLibrary.DataTypes.FingerprintTemplate _template;
-        SocketControl socket = new SocketControl();
-        //SocketControlImage socketImg = new SocketControlImage();
-        public static string Log;
+        private SocketControl socket;
+        internal static LogControl logControl;
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -243,6 +243,7 @@ namespace FingerprintNetSample
                 fingerPrint.CaptureFinalize();
                 fingerPrint.Finalizer();
                 socket.StopListening();
+                logControl.SetFile();
                 //socketImg.StopListening();
             }
             catch { }
@@ -727,9 +728,8 @@ namespace FingerprintNetSample
 
         private void menuItemStartServer_Click(object sender, EventArgs e)
         {            
-            //socket.StartListening();
+            socket.StartListening();
             //SynchronousSocketListener.StartListening();
-            SocketControl.ReceiveTCP(11000);
             /*socketImg.StartListening();
             this.pictureBox1.Image = socketImg.image;
             this.pictureBox1_Click(sender, e);*/
@@ -737,7 +737,8 @@ namespace FingerprintNetSample
 
         private void menuItemStopServer_Click(object sender, EventArgs e)
         {
-            socket.StopListening();
+            socket.RestartListening();
+            logControl.SetFile();
             //socketImg.StopListening();
         }
 
@@ -748,7 +749,7 @@ namespace FingerprintNetSample
 
         private void logToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(Log);
+            MessageBox.Show(logControl.GetCurrent());
         }
     }
 }

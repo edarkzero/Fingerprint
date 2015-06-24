@@ -73,7 +73,7 @@ namespace FingerprintClient
                 //SynchronousSocketClient.StartClient(bmpBytes);
 
                 //Testing TCP send from 3rd party user
-                SocketManager.SendTCP(openFileDialog.FileName, "127.0.0.1", 11000);
+                SocketManager.SendTCP(openFileDialog.FileName);
             }
         }
     }

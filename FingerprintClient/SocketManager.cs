@@ -31,13 +31,16 @@ namespace FingerprintClient
             return response.Split(new String[]{"[{sep}]"},StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public static void SendTCP(string M, string IPA, Int32 PortN)
+        public static void SendTCP(string M)
         {
             byte[] SendingBuffer = null;
             int BufferSize = 1024;
             TcpClient client = null;
             string lblStatus = "";
             NetworkStream netstream = null;
+            Int32 PortN = 11001;
+            string IPA = "127.0.0.1";
+
             try
             {
                  client = new TcpClient(IPA, PortN);
@@ -291,7 +294,7 @@ namespace FingerprintClient
                 // This example uses port 11000 on the local computer.
                 IPHostEntry ipHostInfo = Dns.Resolve("127.0.0.1");
                 IPAddress ipAddress = ipHostInfo.AddressList[0];
-                IPEndPoint remoteEP = new IPEndPoint(ipAddress,11000);
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress,11002);
 
                 // Create a TCP/IP  socket.
                 Socket sender = new Socket(AddressFamily.InterNetwork, 

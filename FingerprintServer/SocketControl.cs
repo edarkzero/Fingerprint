@@ -13,28 +13,43 @@ namespace FingerprintNetSample
     public class SocketControl
     {
         public Thread oThread;
+        public Thread oThread2;
 
         public SocketControl()
         {
             oThread = new Thread(new ThreadStart(AsynchronousSocketListener.StartListening));
+            oThread2 = new Thread(new ThreadStart(ReceiveTCP));
         }
 
         public void StartListening()
-        {
+        {            
+            oThread = new Thread(new ThreadStart(AsynchronousSocketListener.StartListening));
+            oThread2 = new Thread(new ThreadStart(ReceiveTCP));
+
             if (!oThread.IsAlive)
                 oThread.Start();
+            if (!oThread2.IsAlive)
+                oThread2.Start();
         }
 
         public void StopListening()
         {
             if (oThread.IsAlive)
                 oThread.Abort();
+            if (oThread2.IsAlive)
+                oThread2.Abort();
         }
 
-        public static void ReceiveTCP(int portN)
+        public void RestartListening()
+        {
+            //DO NOTHING I DONT KNOW XD
+        }
+
+        private void ReceiveTCP()
         {
             TcpListener Listener = null;
             string Status = string.Empty;
+            Int32 portN = 11001;
 
             try
             {
@@ -48,8 +63,10 @@ namespace FingerprintNetSample
 
             byte[] RecData = new byte[1024];
             int RecBytes;
+            string path = "..\\..\\TEMP\\";
+            string file = "finger_test.bmp";
 
-            for (; ; )
+            while(true)
             {
                 TcpClient client = null;
                 NetworkStream netstream = null;
@@ -61,12 +78,13 @@ namespace FingerprintNetSample
                         client = Listener.AcceptTcpClient();
                         netstream = client.GetStream();
                         Status = "Connected to a client\n";
-                        //result = MessageBox.Show(message, caption, buttons);
 
+                        if(!Directory.Exists(path))
+                            Directory.CreateDirectory(path);
 
-                        string SaveFileName = "D:\\Users\\Edgar Cardona\\Desktop\\finger_test.bmp";
+                        string SaveFilePath = path+file;
                         int totalrecbytes = 0;
-                        FileStream Fs = new FileStream(SaveFileName, FileMode.OpenOrCreate, FileAccess.Write);
+                        FileStream Fs = new FileStream(SaveFilePath, FileMode.OpenOrCreate, FileAccess.Write);
                         
                         while ((RecBytes = netstream.Read(RecData, 0, RecData.Length)) > 0)
                         {
@@ -77,6 +95,9 @@ namespace FingerprintNetSample
                         Fs.Close();
                         netstream.Close();
                         client.Close();
+
+                        //Validate fingerprint image
+
                         break;
                     }
                 }
@@ -301,7 +322,7 @@ namespace FingerprintNetSample
             // host running the application.
             IPHostEntry ipHostInfo = Dns.Resolve("127.0.0.1");
             IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11002);
 
             // Create a TCP/IP socket.
             Socket listener = new Socket(AddressFamily.InterNetwork,
