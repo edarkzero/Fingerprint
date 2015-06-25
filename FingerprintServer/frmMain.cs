@@ -397,7 +397,12 @@ namespace FingerprintNetSample
         private void DisplayUser(IDataReader dataReader)
         {
             UserView view = new UserView();
-            view.setFields(Convert.ToString(dataReader["Name"]), Convert.ToString(dataReader["Info"]));
+            string name = Convert.ToString(dataReader["Name"]);
+            string info = Convert.ToString(dataReader["Info"]);
+
+            //values
+
+            view.setFields(name, info);
             view.Show(this);
         }
 
@@ -728,7 +733,7 @@ namespace FingerprintNetSample
 
         private void menuItemStartServer_Click(object sender, EventArgs e)
         {            
-            socket.StartListening();
+            socket.StartListening(ref fingerPrint);
             //SynchronousSocketListener.StartListening();
             /*socketImg.StartListening();
             this.pictureBox1.Image = socketImg.image;
