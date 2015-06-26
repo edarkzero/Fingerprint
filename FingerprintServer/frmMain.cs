@@ -350,13 +350,22 @@ namespace FingerprintNetSample
                             testTemplate.Quality = quality;
 
                             int score;
+                            string name = Convert.ToString(dataReader["Name"]);
+                            string info = Convert.ToString(dataReader["Info"]);
+
+                            if (dataReader["Name"] == null)
+                                name = "Invalid";
+
+                            if (dataReader["Info"] == null)
+                                info = "Invalid";
+
                             if (Identify(testTemplate, out score))
                             {
 
                                 SetMatchBar(score , Color.SeaGreen);
                                 SetStatusMessage("Template Matched");
                                 DisplayImage(_template, true);
-                                DisplayUser(dataReader);
+                                DisplayUser(name,info);
 
                                 return;
                             }
@@ -364,7 +373,9 @@ namespace FingerprintNetSample
                             {
                                 SetMatchBar(score, Color.LightCoral);
                                 SetStatusMessage("Template Unmatched");
-                            }
+                            }                            
+
+                            SynchronousSocketListener.StartClient(name + "[{sep}]" + info);
                         }
 
                         SetMatchBar(0,Color.Gray);
@@ -394,14 +405,9 @@ namespace FingerprintNetSample
             view.Show(this);
         }
 
-        private void DisplayUser(IDataReader dataReader)
+        private void DisplayUser(string name, string info)
         {
-            UserView view = new UserView();
-            string name = Convert.ToString(dataReader["Name"]);
-            string info = Convert.ToString(dataReader["Info"]);
-
-            SynchronousSocketListener.StartClient(name+"[{sep}]"+info);
-
+            UserView view = new UserView();           
             view.setFields(name, info);
             view.Show(this);
         }

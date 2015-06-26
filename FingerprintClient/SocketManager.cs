@@ -31,6 +31,13 @@ namespace FingerprintClient
             return response.Split(new String[]{"[{sep}]"},StringSplitOptions.RemoveEmptyEntries);
         }
 
+        public static string[] getFormattedResponse(string input)
+        {            
+            string[] result = input.Split(new String[] { "[{sep}]" }, StringSplitOptions.RemoveEmptyEntries);
+            result[1] = result[1].Replace("<EOF>", "");
+            return result;
+        }
+
         public static void SendTCP(string M)
         {
             byte[] SendingBuffer = null;
@@ -285,7 +292,7 @@ namespace FingerprintClient
     {
         public static string data = null;
 
-        public static void StartListening()
+        public static void StartListening(SetTextCallback setTextCallback = null)
         {
             // Data buffer for incoming data.
             byte[] bytes = new Byte[1024];
@@ -333,6 +340,7 @@ namespace FingerprintClient
 
                     // Echo the data back to the client.
                     byte[] msg = Encoding.ASCII.GetBytes(data);
+                    setTextCallback(SocketManager.getFormattedResponse(data));
 
                     handler.Send(msg);
                     handler.Shutdown(SocketShutdown.Both);

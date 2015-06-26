@@ -9,19 +9,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Fingerprint.Password;
 using System.IO;
-using System.Threading;
 
 namespace FingerprintClient
 {
+    public delegate void SetTextCallback(string[] text);
+
     public partial class Main : Form
     {
-        private Thread oThread;
+        ThreadManager tm;
+        
 
         public Main()
         {
             InitializeComponent();
-            oThread = new Thread(new ThreadStart(SynchronousSocketClient.StartListening));
-            oThread.Start();
+            tm = new ThreadManager(new SetTextCallback(SetText));
         }
 
         private void buttonSend_Click(object sender, EventArgs e)
@@ -34,6 +35,20 @@ namespace FingerprintClient
             string[] strings = sm.getResponse();
             this.textBoxSName.Text = strings[0];
             this.textBoxSInfo.Text = strings[1];
+        }
+
+        private void SetText(string[] text)
+        {
+            if (this.textBoxSName.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(SetText);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {                
+                this.textBoxSName.Text = text[0];
+                this.textBoxSInfo.Text = text[1];
+            }
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -84,15 +99,12 @@ namespace FingerprintClient
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            try
-            {
-                if(oThread.IsAlive)
-                    oThread.Abort();    
-            }
-            catch
-            {
+            tm.Stop(); 
+        }
 
-            }            
+        private void textBoxSName_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

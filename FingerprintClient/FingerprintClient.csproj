@@ -60,6 +60,7 @@
     <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="Properties\Settings.Designer.cs" />
     <Compile Include="SocketManager.cs" />
+    <Compile Include="ThreadManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Main.resx">
