@@ -400,7 +400,7 @@ namespace FingerprintNetSample
             string name = Convert.ToString(dataReader["Name"]);
             string info = Convert.ToString(dataReader["Info"]);
 
-            //values
+            SynchronousSocketListener.StartClient(name+"[{sep}]"+info);
 
             view.setFields(name, info);
             view.Show(this);

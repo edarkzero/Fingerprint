@@ -380,10 +380,10 @@ namespace FingerprintClient
                     // Send the data through the socket.
                     int bytesSent = sender.Send(msg);
 
-                    // Receive the response from the remote device.
+                    // Receive the response from the remote device.                    
                     int bytesRec = sender.Receive(bytes);
-                    Console.WriteLine("Echoed test = {0}",
-                        Encoding.ASCII.GetString(bytes,0,bytesRec));
+                    data = Encoding.ASCII.GetString(bytes, 0, bytesRec);
+                    Console.WriteLine("Echoed test = {0}",data);
 
                     // Release the socket.
                     sender.Shutdown(SocketShutdown.Both);

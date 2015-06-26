@@ -9,14 +9,19 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Fingerprint.Password;
 using System.IO;
+using System.Threading;
 
 namespace FingerprintClient
 {
     public partial class Main : Form
     {
+        private Thread oThread;
+
         public Main()
         {
             InitializeComponent();
+            oThread = new Thread(new ThreadStart(SynchronousSocketClient.StartListening));
+            oThread.Start();
         }
 
         private void buttonSend_Click(object sender, EventArgs e)
@@ -75,6 +80,19 @@ namespace FingerprintClient
                 //Testing TCP send from 3rd party user
                 SocketManager.SendTCP(openFileDialog.FileName);
             }
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                if(oThread.IsAlive)
+                    oThread.Abort();    
+            }
+            catch
+            {
+
+            }            
         }
     }
 }

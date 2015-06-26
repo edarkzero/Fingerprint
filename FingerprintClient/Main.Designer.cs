@@ -263,6 +263,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "Main";
             this.Text = "FingerPrint Client";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.panel1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

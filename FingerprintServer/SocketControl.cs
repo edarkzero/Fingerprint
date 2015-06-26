@@ -111,6 +111,7 @@ namespace FingerprintNetSample
                     Console.WriteLine(ex.Message);
                     //netstream.Close();
                 }
+
             }
         }
     }
@@ -382,10 +383,12 @@ namespace FingerprintNetSample
 
         }
 
-        public static void StartClient()
+        public static void StartClient(string message = null)
         {
             // Data buffer for incoming data.
             byte[] bytes = new byte[1024];
+            if (message == null) message = "This is a test<EOF>";
+            else message += "<EOF>";
 
             // Connect to a remote device.
             try
@@ -408,8 +411,8 @@ namespace FingerprintNetSample
                     Console.WriteLine("Socket connected to {0}",
                         sender.RemoteEndPoint.ToString());
 
-                    // Encode the data string into a byte array.
-                    byte[] msg = Encoding.ASCII.GetBytes("This is a test<EOF>");
+                    // Encode the data string into a byte array.                    
+                    byte[] msg = Encoding.ASCII.GetBytes(message);
                     //byte[] msg = info;
 
                     // Send the data through the socket.
